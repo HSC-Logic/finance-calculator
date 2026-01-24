@@ -1,33 +1,31 @@
 import { useState } from "react";
-import InputField from "./components/InputField";
-import { calculate3DPrintPrice } from "./calculators/printing3d/calculator";
+import Tabs from "./components/Tabs";
+import Printing3DCalculator from "./calculators/printing3d/Printing3DCalculator";
+// (placeholder for next step)
+const ServiceCalculator = () => (
+    <div className="p-6 bg-white rounded shadow">
+        Service Calculator (coming next)
+    </div>
+);
 
 function App() {
-    const [materialCost, setMaterialCost] = useState(0);
-    const [machineCost, setMachineCost] = useState(0);
-    const [laborCost, setLaborCost] = useState(0);
-    const [profitMargin, setProfitMargin] = useState(20);
-
-    const result = calculate3DPrintPrice({
-        materialCost,
-        machineCost,
-        laborCost,
-        profitMargin,
-    });
+    const [activeTab, setActiveTab] = useState("3d");
 
     return (
-        <div style={{ padding: 20 }}>
-            <h1>3D Printing Price Calculator</h1>
+        <div className="min-h-screen bg-gray-100 p-6">
+            <div className="max-w-5xl mx-auto">
+                <Tabs
+                    activeTab={activeTab}
+                    onChange={setActiveTab}
+                    tabs={[
+                        { id: "3d", label: "3D Printing" },
+                        { id: "service", label: "Software / Services" },
+                    ]}
+                />
 
-            <InputField label="Material Cost" value={materialCost} onChange={setMaterialCost} />
-            <InputField label="Machine Cost" value={machineCost} onChange={setMachineCost} />
-            <InputField label="Labor Cost" value={laborCost} onChange={setLaborCost} />
-            <InputField label="Profit %" value={profitMargin} onChange={setProfitMargin} />
-
-            <hr />
-
-            <p><strong>Base Cost:</strong> {result.baseCost}</p>
-            <p><strong>Selling Price:</strong> {result.sellingPrice}</p>
+                {activeTab === "3d" && <Printing3DCalculator />}
+                {activeTab === "service" && <ServiceCalculator />}
+            </div>
         </div>
     );
 }
