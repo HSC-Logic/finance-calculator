@@ -12,6 +12,8 @@ import TaxToggle from "../../components/TaxToggle.tsx";
 import PartsEditor from "../../components/PartsEditor";
 import type { Part } from "../common/partTypes";
 import { calculatePartsCost } from "../common/partsUtils";
+import { generateQuotationPDF } from "../../utils/pdfQuotation";
+
 
 
 
@@ -258,6 +260,39 @@ export default function Printing3DCalculator() {
                         value={result.finalPrice}
                         highlight
                     />
+
+                    <button
+                        onClick={() =>
+                            generateQuotationPDF({
+                                quotationNo: `Q-${Date.now()}`,
+                                date: new Date().toLocaleDateString(),
+                                productName: "Custom 3D Printed Product",
+                                printerName: selectedPrinter.name,
+
+                                breakdown: {
+                                    materialCost: result.breakdown.materialCost,
+                                    laborCost: result.breakdown.laborCost,
+                                    electricityCost: result.breakdown.electricityCost,
+                                    maintenanceCost: result.breakdown.maintenanceCost,
+                                    partsCost,
+                                    bufferAmount: result.bufferedCost - result.baseCost,
+                                    profitAmount: result.profit.amount,
+                                    taxAmount: result.tax.amount,
+                                },
+
+                                totals: {
+                                    baseCost: result.baseCost,
+                                    finalPrice: result.finalPrice,
+                                },
+
+                                parts,
+                            })
+                        }
+                        className="mt-4 w-full bg-green-600 text-white py-2 rounded font-semibold"
+                    >
+                        Download PDF Quotation
+                    </button>
+
 
                 </div>
             </div>

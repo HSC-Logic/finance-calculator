@@ -1,4 +1,6 @@
 import type { Printing3DInput } from "./types";
+import { roundMoney } from "../common/currency";
+
 
 export function calculate3DPrintPricing(input: Printing3DInput) {
     // 1️⃣ Material cost
@@ -52,8 +54,12 @@ export function calculate3DPrintPricing(input: Printing3DInput) {
         ? sellingPrice * (input.taxRate / 100)
         : 0;
 
-    const finalPrice =
+    const finalPriceRaw =
         sellingPrice + taxAmount;
+
+    const finalPrice =
+        roundMoney(finalPriceRaw);
+
 
     return {
         breakdown: {
