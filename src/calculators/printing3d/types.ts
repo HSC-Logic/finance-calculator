@@ -21,6 +21,9 @@ export type Printing3DInput = {
     // Buffer
     bufferPercent: number; // %
 
+    // Additional Parts Cost
+    partsCost: number;
+
     // Profit
     profitMargin: ProfitMargin;
 

@@ -31,7 +31,8 @@ export function calculate3DPrintPricing(input: Printing3DInput) {
         materialCost +
         laborCost +
         electricityCost +
-        maintenanceCost;
+        maintenanceCost+
+        input.partsCost;
 
     const bufferAmount =
         baseCost * (input.bufferPercent / 100);

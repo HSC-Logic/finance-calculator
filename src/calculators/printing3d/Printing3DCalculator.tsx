@@ -9,8 +9,15 @@ import { PRINTERS } from "./printers";
 import type { PrinterProfile } from "./printerTypes";
 import TaxToggle from "../../components/TaxToggle.tsx";
 
+import PartsEditor from "../../components/PartsEditor";
+import type { Part } from "../common/partTypes";
+import { calculatePartsCost } from "../common/partsUtils";
+
+
 
 export default function Printing3DCalculator() {
+
+    const [parts, setParts] = useState<Part[]>([]);
 
     const MAINTENANCE_RATE = 0.1;
 
@@ -45,6 +52,8 @@ export default function Printing3DCalculator() {
     const [taxEnabled, setTaxEnabled] = useState(false);
     const [taxRate, setTaxRate] = useState(18);
 
+    const partsCost = calculatePartsCost(parts);
+
 
     const result = calculate3DPrintPricing({
         filamentCostPerKg,
@@ -60,6 +69,8 @@ export default function Printing3DCalculator() {
         estimatedAnnualPrintHours,
 
         bufferPercent,
+
+        partsCost,
 
         profitMargin,
         taxEnabled,
@@ -99,6 +110,8 @@ export default function Printing3DCalculator() {
                             suffix="grams"
                         />
                     </div>
+
+                    <PartsEditor parts={parts} onChange={setParts} />
 
                     {/* Print & Labor */}
                     <div className="space-y-3">
@@ -217,6 +230,7 @@ export default function Printing3DCalculator() {
                     <hr />
 
                     <ResultCard label="Base Cost" value={result.baseCost} />
+                    <ResultCard label="Parts Cost" value={partsCost} />
                     <ResultCard
                         label="Cost After Buffer"
                         value={result.bufferedCost}
